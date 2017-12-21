@@ -16,6 +16,20 @@ fi
 # Install php
 apt-get install -y php libapache2-mod-php
 
+# Install compilers
+apt-get install -y gcc
+
+
+## ARM compilers
+apt-get install -y gcc-arm-none-eabi gcc-arm-linux-gnueabi 
+
+## MIPS compilers
+apt-get install -y gcc-mips-linux-gnu
+
+## AVR compilers
+apt-get install -y gcc-avr
+
+
 # Restart apache
 echo "-- Restart apache --"
 service apache2 restart
