@@ -2,7 +2,7 @@ function sendCode() {
 
 	/* Send the code with newlines instead of br tags */
 	var code = document.getElementById("inputCodeArea").innerHTML;
-	code = str.replace(/<br\s*\/?>/mg, "\n");
+	code = code.replace(/<br\s*\/?>/mg, "\n");
 
 
 
