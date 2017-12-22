@@ -11,13 +11,11 @@
 </head>
 
 
-<body>
+<body onload="enableTabChar('inputCodeArea');">
 
-	<div class="codeArea" id="inputCodeArea" contenteditable="true">
-	</div>
+	<div class="codeArea" id="inputCodeArea" contenteditable="true"></div>
 
-	<div class="codeArea" id="outputCodeArea">
-	</div>
+	<pre class="codeArea" id="outputCodeArea"></pre>
 
 	<button type="button" onclick="sendCode();return false;">Compile it</button>
 
