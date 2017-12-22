@@ -23,16 +23,28 @@ function enableTabChar(elementId) {
 	};
 }
 
+function prepareCodeForSend(code)
+{
+	/* Replace &lt and &gt with angle brackets */
+	code = code.replace(/&lt;/g, '<');
+	code = code.replace(/&gt;/g, '>');
+
+	/* Replace <br>s with \n */
+	code = code.replace(/<br\s*\/?>/mg, "\n");
+
+	/* Replace nbsp with spaces */
+	code = code.replace(/&nbsp;/g, ' ');
+
+	return code;
+}
+
 function sendCode() {
 
 	/* Send the code with newlines instead of br tags */
 	var code = document.getElementById("inputCodeArea").innerHTML;
-	code = code.replace(/<br\s*\/?>/mg, "\n");
-
-
+	code = prepareCodeForSend(code);
 
 	var xhr = new XMLHttpRequest();
-
 	xhr.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			document.getElementById("outputCodeArea").innerHTML = this.responseText.replace(/\n/g, "<br />");
