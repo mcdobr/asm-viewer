@@ -13,7 +13,7 @@
 
 <body onload="enableTabChar('inputCodeArea');">
 
-	<form>
+	<form action="compile.php" method="post" onsubmit="sendCode();return false;">
 		<select name="compiler" id="compilerSelect">
 			<option value="avr-gcc">gcc 4.9.2 AVR</option>
 			<option value="gcc" selected="selected">gcc 5.4.0 x86</option>
