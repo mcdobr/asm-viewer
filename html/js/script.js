@@ -30,7 +30,7 @@ function prepareCodeForSend(code)
 	code = code.replace(/&gt;/g, '>');
 
 	/* Replace <br>s with \n */
-	code = code.replace(/<br\s*\/?>/mg, "\n");
+	code = code.replace(/<br\s*\/?>/mg, '\n');
 
 	/* Replace nbsp with spaces */
 	code = code.replace(/&nbsp;/g, ' ');
@@ -43,6 +43,9 @@ function sendCode() {
 	/* Send the code with newlines instead of br tags */
 	var code = document.getElementById("inputCodeArea").innerHTML;
 	code = prepareCodeForSend(code);
+	var compiler = document.getElementById("compilerSelect").value;
+	var additional = document.getElementById("additionalOptions").value;
+
 
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
@@ -53,6 +56,9 @@ function sendCode() {
 
 	var formData = new FormData();
 	formData.append("code", code);
+	formData.append("compiler", compiler);
+	formData.append("additional", additional);
+
 
 	xhr.open("POST", "compile.php", true);
 	xhr.send(formData);
