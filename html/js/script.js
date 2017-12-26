@@ -23,6 +23,19 @@ function enableTabChar(elementId) {
 	};
 }
 
+function brToNewline(str) {
+	return str.replace(/<br\s*\/?>/mg, '\n');
+}
+
+function newlineToBr(str) {
+	return str.replace(/\n/g, "<br />");
+}
+
+function strip(html) {
+	var doc = new DOMParser().parseFromString(html, 'text/html');
+	return doc.body.textContent || "";
+}
+
 function prepareCodeForSend(code)
 {
 	/* Replace &lt and &gt with angle brackets */
@@ -30,7 +43,7 @@ function prepareCodeForSend(code)
 	code = code.replace(/&gt;/g, '>');
 
 	/* Replace <br>s with \n */
-	code = code.replace(/<br\s*\/?>/mg, '\n');
+	code = brToNewline(code);
 
 	/* Replace nbsp with spaces */
 	code = code.replace(/&nbsp;/g, ' ');
@@ -39,13 +52,15 @@ function prepareCodeForSend(code)
 }
 
 function sendCode() {
-
 	/* Send the code with newlines instead of br tags */
-	var code = document.getElementById("inputCodeArea").innerHTML;
+	
+	var codeArea = document.getElementById("inputCodeArea");
+	var code = strip(brToNewline(codeArea.innerHTML));
 	code = prepareCodeForSend(code);
+	
+	
 	var compiler = document.getElementById("compilerSelect").value;
 	var additional = document.getElementById("additionalOptions").value;
-
 
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
@@ -62,4 +77,29 @@ function sendCode() {
 
 	xhr.open("POST", "compile.php", true);
 	xhr.send(formData);
+
+	/* To be removed in production (aka later) */
+	highlightSyntax();
 }
+
+function highlightSyntax() {
+	/* This function highlights keywords by grabbing their text and wrapping them with span tags */
+	var keywords = ["auto", "break", "case", "char", "const", "continue",
+		"default", "do", "double", "else", "enum", "extern", "float",
+		"for", "goto", "if", "int", "long", "register", "return",
+		"short", "signed", "sizeof", "static", "struct", "switch",
+		"typedef", "union", "unsigned", "void", "volatile", "while"
+	];
+
+	var keywordRegex = new RegExp(keywords.join("|"), 'gi');
+	var inputCodeArea = document.getElementById('inputCodeArea');
+	
+	inputCodeArea.innerHTML = brToNewline(inputCodeArea.innerHTML);
+	
+	var text = inputCodeArea.textContent;
+	text = text.replace(keywordRegex, '<span class="keyword">$&</span>');
+	text = newlineToBr(text);
+
+	inputCodeArea.innerHTML = text;
+}
+

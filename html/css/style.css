@@ -19,3 +19,7 @@ html, body {
 #outputCodeArea {
 	float: right;
 }
+
+.keyword {
+	color: blue;
+}

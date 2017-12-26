@@ -2,6 +2,8 @@
 	error_reporting(E_ALL);
 	ini_set('display_errors', '1');
 
+	var_dump($_POST['code']);
+
 	$c_path = '/tmp/temp.c';
 	$asm_path = '/tmp/temp.s';
 
@@ -29,7 +31,7 @@
 		echo $asm_code;
 
 		/* Delete the temporary files */
-		unlink($asm_path);
+		//unlink($asm_path);
 	}
-	unlink($c_path);
+	//unlink($c_path);
 ?>
