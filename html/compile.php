@@ -2,16 +2,24 @@
 	error_reporting(E_ALL);
 	ini_set('display_errors', '1');
 
-	var_dump($_POST['code']);
-
 	$c_path = '/tmp/temp.c';
 	$asm_path = '/tmp/temp.s';
 
+	$in = json_decode(stripslashes(file_get_contents("php://input")), true);
+	var_dump($in);
+	
+	
 	/* Compile the file and return the asm code */
-	file_put_contents($c_path, $_POST['code']);
+	
+	
+	
+	
+	file_put_contents($c_path, $in['code']);
 
-	$compiler = $_POST['compiler'];
-	$additional = $_POST['additional'];
+	$compiler = $in['compiler'];
+	$additional = $in['additional'];
+
+
 
 	echo $additional . PHP_EOL;
 
@@ -20,6 +28,7 @@
 	$cmdline_string = escapeshellcmd($cmdline_string);	
 	exec($cmdline_string, $exec_output, $ret_code);
 
+	//header("Content-Type: application/json");
 
 	var_dump($exec_output);
 	

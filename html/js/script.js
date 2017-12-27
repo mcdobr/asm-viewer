@@ -10,7 +10,7 @@ function enableTabChar(elementId) {
 			var sel = doc.getSelection();
 			var range = sel.getRangeAt(0);
 
-			var tabNode = document.createTextNode("\u00a0\u00a0\u00a0\u00a0");
+			var tabNode = document.createTextNode("    ");
 			range.insertNode(tabNode);
 
 			/* Put the cursor after the tab */
@@ -24,7 +24,7 @@ function enableTabChar(elementId) {
 }
 
 function brToNewline(str) {
-	return str.replace(/<br\s*\/?>/mg, '\n');
+	return str.replace(/<br\s*\/?>/mg, "\\n");
 }
 
 function newlineToBr(str) {
@@ -38,13 +38,6 @@ function strip(html) {
 
 function prepareCodeForSend(code)
 {
-	/* Replace &lt and &gt with angle brackets */
-	code = code.replace(/&lt;/g, '<');
-	code = code.replace(/&gt;/g, '>');
-
-	/* Replace <br>s with \n */
-	code = brToNewline(code);
-
 	/* Replace nbsp with spaces */
 	code = code.replace(/&nbsp;/g, ' ');
 
@@ -53,7 +46,6 @@ function prepareCodeForSend(code)
 
 function sendCode() {
 	/* Send the code with newlines instead of br tags */
-	
 	var codeArea = document.getElementById("inputCodeArea");
 	var code = strip(brToNewline(codeArea.innerHTML));
 	code = prepareCodeForSend(code);
@@ -62,6 +54,12 @@ function sendCode() {
 	var compiler = document.getElementById("compilerSelect").value;
 	var additional = document.getElementById("additionalOptions").value;
 
+	var requestBody = JSON.stringify({
+		"code": code,
+		"compiler": compiler,
+		"additional": additional
+	});
+
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
@@ -69,17 +67,13 @@ function sendCode() {
 		}
 	};
 
-	var formData = new FormData();
-	formData.append("code", code);
-	formData.append("compiler", compiler);
-	formData.append("additional", additional);
-
-
+	
 	xhr.open("POST", "compile.php", true);
-	xhr.send(formData);
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.send(requestBody);
 
 	/* To be removed in production (aka later) */
-	highlightSyntax();
+	//highlightSyntax();
 }
 
 function highlightSyntax() {
