@@ -96,7 +96,7 @@ function highlightSyntax() {
 	inputCodeArea.innerHTML = brToNewline(inputCodeArea.innerHTML);
 	
 	var text = inputCodeArea.textContent;
-	text = text.replace(keywordRegex, '<span class="keyword" contenteditable="false">$&</span>');
+	text = text.replace(keywordRegex, '<span class="keyword">$&</span>');
 	text = newlineToBr(text);
 
 	inputCodeArea.innerHTML = text;
