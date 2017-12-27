@@ -27,11 +27,12 @@
 
 	</form>
 
+	<main>
+		<div class="codeArea" id="inputCodeArea" contenteditable="true"></div>
+		<pre class="codeArea" id="outputCodeArea"></pre>
+		<button type="button" onclick="sendCode();return false;">Compile it</button>
+	</main>
 
-	<div class="codeArea" id="inputCodeArea" contenteditable="true"></div>
-	<pre class="codeArea" id="outputCodeArea"></pre>
-
-	<button type="button" onclick="sendCode();return false;">Compile it</button>
 
 </body>
 </html>
