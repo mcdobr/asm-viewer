@@ -24,6 +24,10 @@ function enableTabChar(elementId) {
 }
 
 function brToNewline(str) {
+	return str.replace(/<br\s*\/?>/mg, "\n");
+}
+
+function brToJSONnl(str) {
 	return str.replace(/<br\s*\/?>/mg, "\\n");
 }
 
@@ -47,7 +51,7 @@ function prepareCodeForSend(code)
 function sendCode() {
 	/* Send the code with newlines instead of br tags */
 	var codeArea = document.getElementById("inputCodeArea");
-	var code = strip(brToNewline(codeArea.innerHTML));
+	var code = strip(brToJSONnl(codeArea.innerHTML));
 	code = prepareCodeForSend(code);
 	
 	
@@ -73,7 +77,7 @@ function sendCode() {
 	xhr.send(requestBody);
 
 	/* To be removed in production (aka later) */
-	//highlightSyntax();
+	highlightSyntax();
 }
 
 function highlightSyntax() {
@@ -85,15 +89,17 @@ function highlightSyntax() {
 		"typedef", "union", "unsigned", "void", "volatile", "while"
 	];
 
-	var keywordRegex = new RegExp(keywords.join("|"), 'gi');
+	/* Match the whole word with \\b from the () set */
+	var keywordRegex = new RegExp("\\b(" + keywords.join("|") + ")\\b", 'gi');
 	var inputCodeArea = document.getElementById('inputCodeArea');
 	
 	inputCodeArea.innerHTML = brToNewline(inputCodeArea.innerHTML);
 	
 	var text = inputCodeArea.textContent;
-	text = text.replace(keywordRegex, '<span class="keyword">$&</span>');
+	text = text.replace(keywordRegex, '<span class="keyword" contenteditable="false">$&</span>');
 	text = newlineToBr(text);
 
 	inputCodeArea.innerHTML = text;
 }
 
+//setInterval(highlightSyntax, 10000);
