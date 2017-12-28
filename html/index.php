@@ -22,7 +22,6 @@
 			<option value="mips-linux-gnu-gcc">gcc 5.4.0 MIPS (Linux)</option>
 		</select>
 
-		<input type="checkbox" name="intel-syntax">Intel syntax
 		Compiler options: <input type="text" name="additionalOptions" id="additionalOptions"> 
 
 	</form>

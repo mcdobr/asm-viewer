@@ -14,6 +14,12 @@
 	$compiler = $in['compiler'];
 	$additional = $in['additional'];
 
+	/* Set to the intel syntax */
+	if ($compiler === "gcc" && preg_match('/^-masm=/', $additional) == 0) {
+		$additional = $additional . " -masm=intel";
+	}
+	
+
 	/* Create the command line string, validate it and execute it  */	
 	$cmdline_string = "$compiler $c_path -S -o $asm_path -fno-asynchronous-unwind-tables " . $additional;	
 	$cmdline_string = escapeshellcmd($cmdline_string);	
