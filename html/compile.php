@@ -18,7 +18,7 @@
 	$asm_path = '/tmp/temp.lst';
 
 	$in = json_decode(stripslashes(file_get_contents("php://input")), true);
-	
+
 	/* Compile the file and return the asm code */
 	file_put_contents($c_path, $in['code']);
 	$compiler = $in['compiler'];
@@ -26,7 +26,7 @@
 
 	addDefaultAdditionalFlags($additional, $compiler);
 
-	/* Create the command line string, validate it and execute it  */	
+	/* Create the command line string, validate it and execute it  */
 	/*if (!file_exists($asm_path)) {
 		touch($asm_path);
 		chmod($asm_path, 0666);
@@ -39,20 +39,24 @@
 
 	foreach ($exec_output as $listing_line) {
 
-		if (isHighLevelCode($listing_line) || isMachineInstruction($listing_line)) {
-			
+		if (isRelevantToHumanReading($listing_line)) {
+
 			if (isHighLevelCode($listing_line)) {
 				$listing_line = stripHighLevelCode($listing_line);
 			} else if (isMachineInstruction($listing_line)) {
 				$listing_line = stripMachineInstruction($listing_line);
+			} else if (isLabel($listing_line)) {
+				$listing_line = stripLabel($listing_line);
 			}
-
 
 			echo $listing_line . PHP_EOL;
 			//echo isHighLevelCode($listing_line) . ' ' . isMachineInstruction($listing_line) . PHP_EOL;
 		}
 	}
+
+
 	/*
+	echo PHP_EOL;
 	foreach ($exec_output as $listing_line) {
 		echo $listing_line . PHP_EOL;
 	}*/

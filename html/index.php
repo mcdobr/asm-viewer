@@ -22,12 +22,12 @@
 			<option value="mips-linux-gnu-gcc">gcc 5.4.0 MIPS (Linux)</option>
 		</select>
 
-		Compiler options: <input type="text" name="additionalOptions" id="additionalOptions"> 
+		Compiler options: <input type="text" name="additionalOptions" id="additionalOptions">
 
 	</form>
 
 	<main>
-		<div class="codeArea" id="inputCodeArea" contenteditable="true"></div>
+		<pre class="codeArea" id="inputCodeArea" contenteditable="true"></pre>
 		<pre class="codeArea" id="outputCodeArea"></pre>
 		<button type="button" onclick="sendCode();return false;">Compile it</button>
 	</main>
