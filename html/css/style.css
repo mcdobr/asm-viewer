@@ -15,7 +15,7 @@ main {
 	min-width: 300px;
 	width: 49%;
 	height: 100%;
-	border: 1px solid black; 
+	border: 1px solid black;
 	margin: 4px;
 	padding: 0;
 	font-family: monospace;
@@ -33,4 +33,17 @@ main {
 
 .keyword {
 	color: blue;
+}
+
+.simpleOptions {
+	margin-left: 2px;
+	margin-right: 2px;
+	border-right: 1px solid black;
+}
+.simpleOptions:last-of-type {
+	border-right: 0px;
+}
+
+#outputCodeArea .highLevelCode {
+	color: #006400;
 }

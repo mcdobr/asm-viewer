@@ -22,7 +22,15 @@
 			<option value="mips-linux-gnu-gcc">gcc 5.4.0 MIPS (Linux)</option>
 		</select>
 
-		Compiler options: <input type="text" name="additionalOptions" id="additionalOptions">
+		<span class="simpleOptions">
+			<input type="checkbox" name="interleave" id="interleave" checked>
+			<label for="interleave">Interleave</label>
+		</span>
+
+		<span class="simpleOptions">
+			<label for="additionalOptions">Compiler options: </label>
+			<input type="text" name="additionalOptions" id="additionalOptions">
+		</span>
 
 	</form>
 

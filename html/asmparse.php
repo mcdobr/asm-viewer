@@ -14,7 +14,11 @@ function isLabel($listing_line) {
 	/* fluff handling AND if it starts with . or $(on MIPS) and ends with :
 	 * \h is for horizontal whitespace
 	 */
-	return preg_match('/[0-9]+[ \t]+[\.\$]?[A-Za-z0-9]+:/', $listing_line);
+	return preg_match('/[0-9]+\s+[\.\$]?[A-Za-z0-9]+:/', $listing_line);
+}
+
+function isEmptyLine($c_code) {
+	return $c_code === "#"; 
 }
 
 function isUselessLabel($label) {
@@ -37,7 +41,7 @@ function isRelevantToHumanReading($listing_line) {
 
 function stripHighLevelCode($listing_line) {
 	$line = trim($listing_line);
-	$line = preg_replace('/[0-9]+:\/tmp\/temp.c\s+\*{4}\s/', '#', $line);
+	$line = preg_replace('/[0-9]+:\/tmp\/temp.c\s+\*{4}\s*/', '#', $line);
 	return $line;
 }
 

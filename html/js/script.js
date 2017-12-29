@@ -53,15 +53,17 @@ function sendCode() {
 	var codeArea = document.getElementById("inputCodeArea");
 	var code = strip(brToJSONnl(codeArea.innerHTML));
 	code = prepareCodeForSend(code);
-	
-	
+
+
 	var compiler = document.getElementById("compilerSelect").value;
 	var additional = document.getElementById("additionalOptions").value;
+	var interleave = document.getElementById("interleave").checked;
 
 	var requestBody = JSON.stringify({
 		"code": code,
 		"compiler": compiler,
-		"additional": additional
+		"additional": additional,
+		"interleave": interleave
 	});
 
 	var xhr = new XMLHttpRequest();
@@ -71,7 +73,7 @@ function sendCode() {
 		}
 	};
 
-	
+
 	xhr.open("POST", "compile.php", true);
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.send(requestBody);
@@ -92,9 +94,9 @@ function highlightSyntax() {
 	/* Match the whole word with \\b from the () set */
 	var keywordRegex = new RegExp("\\b(" + keywords.join("|") + ")\\b", 'gi');
 	var inputCodeArea = document.getElementById('inputCodeArea');
-	
+
 	inputCodeArea.innerHTML = brToNewline(inputCodeArea.innerHTML);
-	
+
 	var text = inputCodeArea.textContent;
 	text = text.replace(keywordRegex, '<span class="keyword">$&</span>');
 	text = newlineToBr(text);
