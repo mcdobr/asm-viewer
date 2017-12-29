@@ -49,9 +49,10 @@
 
 
 			echo $listing_line . PHP_EOL;
+			//echo isHighLevelCode($listing_line) . ' ' . isMachineInstruction($listing_line) . PHP_EOL;
 		}
 	}
-	/*	
+	/*
 	foreach ($exec_output as $listing_line) {
 		echo $listing_line . PHP_EOL;
 	}*/

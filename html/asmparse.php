@@ -5,7 +5,7 @@ function isHighLevelCode($listing_line) {
 }
 
 function isMachineInstruction($listing_line) {
-	return preg_match('/[0-9a-f]{4}/', $listing_line);
+	return preg_match('/\b[0-9a-f]{4}\b/', $listing_line);
 }
 
 function stripHighLevelCode($listing_line) {
