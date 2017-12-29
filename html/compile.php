@@ -9,6 +9,13 @@
 		}
 	}
 
+	function printListing($listing) {
+		echo PHP_EOL;
+		foreach ($listing as $listing_line) {
+			echo $listing_line . PHP_EOL;
+		}
+	}
+
 	error_reporting(E_ALL);
 	ini_set('display_errors', '1');
 	require('asmparse.php');
@@ -43,10 +50,15 @@
 
 			if (isHighLevelCode($listing_line)) {
 				$listing_line = stripHighLevelCode($listing_line);
+				continue;
 			} else if (isMachineInstruction($listing_line)) {
 				$listing_line = stripMachineInstruction($listing_line);
 			} else if (isLabel($listing_line)) {
 				$listing_line = stripLabel($listing_line);
+
+				if (isUselessLabel($listing_line)) {
+					continue;
+				}
 			}
 
 			echo $listing_line . PHP_EOL;
@@ -55,11 +67,8 @@
 	}
 
 
-	/*
-	echo PHP_EOL;
-	foreach ($exec_output as $listing_line) {
-		echo $listing_line . PHP_EOL;
-	}*/
+	printListing($exec_output);
+
 
 	//var_dump($status);
 
