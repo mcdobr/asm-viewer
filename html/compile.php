@@ -11,6 +11,8 @@
 
 	error_reporting(E_ALL);
 	ini_set('display_errors', '1');
+	require('asmparse.php');
+
 
 	$c_path = '/tmp/temp.c';
 	$asm_path = '/tmp/temp.lst';
@@ -32,13 +34,36 @@
 
 	$cmdline_string = escapeshellcmd("$compiler $c_path $additional -Wa,-adhln -g");
 	$status = exec($cmdline_string, $exec_output, $ret_code);
-	echo $cmdline_string . PHP_EOL;
+	//echo $cmdline_string . PHP_EOL;
 
-	var_dump($status);
-	var_dump($exec_output);
-	var_dump($ret_code);
+
+	foreach ($exec_output as $listing_line) {
+
+		if (isHighLevelCode($listing_line) || isMachineInstruction($listing_line)) {
+			
+			if (isHighLevelCode($listing_line)) {
+				$listing_line = stripHighLevelCode($listing_line);
+			} else if (isMachineInstruction($listing_line)) {
+				$listing_line = stripMachineInstruction($listing_line);
+			}
+
+
+			echo $listing_line . PHP_EOL;
+		}
+	}
+	/*	
+	foreach ($exec_output as $listing_line) {
+		echo $listing_line . PHP_EOL;
+	}*/
+
+	//var_dump($status);
+
+	//asta
+	//var_dump($exec_output);
+	//var_dump($ret_code);
 	//header("Content-Type: application/json");
 
+	/*
 	if ($ret_code !== 0) {
 		echo "Compilation failed";
 	} else {
@@ -46,8 +71,8 @@
 
 		echo $asm_code;
 
-		/* Delete the temporary files */
+		 Delete the temporary files/
 		//unlink($asm_path);
-	}
+	}*/
 	unlink($c_path);
 ?>
