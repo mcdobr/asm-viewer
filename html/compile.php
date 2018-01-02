@@ -1,41 +1,11 @@
 <?php
-	function addDefaultAdditionalFlags(&$additional, $compiler) {
-		/* Set to the intel syntax */
-		if ($compiler === "gcc" && preg_match('/^-masm=/', $additional) == 0) {
-			$additional = $additional . " -masm=intel ";
-		}
-		if (preg_match('/^-fno-asynchronous-unwind-tables/', $additional) == 0) {
-			$additional = $additional . " -fno-asynchronous-unwind-tables ";
-		}
-	}
-
-	function printListing($listing) {
-		echo PHP_EOL;
-		foreach ($listing as $listing_line) {
-			echo $listing_line . PHP_EOL;
-		}
-	}
-
-	function isCompilerGood($compiler) {
-		$compilers = array(
-			'avr-gcc',
-			'gcc',
-			'arm-none-eabi-gcc',
-			'arm-linux-gnueabi-gcc',
-			'mips-linux-gnu-gcc'
-		);
-
-		return in_array($compiler, $compilers, true);
-	}
 
 	error_reporting(E_ALL);
 	ini_set('display_errors', '1');
 	require('asmparse.php');
-
+	require('compilerHandling.php');
 
 	$c_path = '/tmp/temp.c';
-	$asm_path = '/tmp/temp.lst';
-
 	$in = json_decode(stripslashes(file_get_contents("php://input")), true);
 
 	//var_dump($in);
@@ -54,14 +24,13 @@
 	addDefaultAdditionalFlags($additional, $compiler);
 
 	/* Create the command line string, validate it and execute it  */
-
 	$cmdline_string = escapeshellcmd("$compiler $c_path $additional -Wa,-adhln -g");
 	$status = exec($cmdline_string, $exec_output, $ret_code);
 	//echo $cmdline_string . PHP_EOL;
 
+	header("Content-Type: application/json");
 
-	//header("Content-Type: application/json");
-
+	$response = '';
 	foreach ($exec_output as $listing_line) {
 
 		if (isRelevantToHumanReading($listing_line)) {
@@ -82,11 +51,14 @@
 				}
 			}
 			//echo $listing_line . PHP_EOL;
-			echo "<span class='$spanClass'>$listing_line</span>" . PHP_EOL;
+			$response = $response . "<span class='$spanClass'>$listing_line</span>" . PHP_EOL;
+
+			//echo "<span class='$spanClass'>$listing_line</span>" . PHP_EOL;
 			//echo isHighLevelCode($listing_line) . ' ' . isMachineInstruction($listing_line) . PHP_EOL;
 		}
 	}
 
+	echo json_encode($response);
 
 	//printListing($exec_output);
 

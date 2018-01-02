@@ -48,6 +48,15 @@ function prepareCodeForSend(code)
 	return code;
 }
 
+function onReceiveCallback(response) {
+	response = JSON.parse(response);
+	document.getElementById("outputCodeArea").innerHTML = response.replace(/\n/g, "<br />");
+
+	
+	highlightMachineMnemonics();
+}
+
+
 function sendCode() {
 	/* Send the code with newlines instead of br tags */
 	var codeArea = document.getElementById("inputCodeArea");
@@ -69,8 +78,7 @@ function sendCode() {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-			document.getElementById("outputCodeArea").innerHTML = this.responseText.replace(/\n/g, "<br />");
-			highlightMachineMnemonics();
+			onReceiveCallback(this.responseText);
 		}
 	};
 
