@@ -50,10 +50,15 @@ function prepareCodeForSend(code)
 
 function onReceiveCallback(response) {
 	response = JSON.parse(response);
-	document.getElementById("outputCodeArea").innerHTML = response.replace(/\n/g, "<br />");
+	outputCode = document.getElementById("outputCodeArea");
 
-	
-	highlightMachineMnemonics();
+	if (response) {
+		outputCode.innerHTML = response.replace(/\n/g, "<br />");
+		highlightMachineMnemonics();
+	} else {
+		outputCode.innerHTML = "Compilation failed!<br />"
+	}
+
 }
 
 

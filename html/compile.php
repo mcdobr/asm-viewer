@@ -19,6 +19,8 @@
 	/* Check the user input */
 	if (!isCompilerGood($compiler)) {
 		die("Stop being so sneaky!");
+	} else {
+		$assemblerCommentChar = getAssemblerCommentCharacter($compiler);
 	}
 
 	addDefaultAdditionalFlags($additional, $compiler);
@@ -35,7 +37,7 @@
 
 		if (isRelevantToHumanReading($listing_line)) {
 			if (isHighLevelCode($listing_line)) {
-				$listing_line = stripHighLevelCode($listing_line);
+				$listing_line = stripHighLevelCode($listing_line, $assemblerCommentChar);
 				$spanClass = "highLevelCode";
 				if (!$mustInterleave || isEmptyLine($listing_line))
 					continue;

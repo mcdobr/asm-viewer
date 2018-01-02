@@ -28,4 +28,12 @@ function isCompilerGood($compiler) {
   return in_array($compiler, $compilers, true);
 }
 
+function getAssemblerCommentCharacter($compiler) {
+  if ($compiler === 'mips-linux-gnu-gcc') {
+    return '#';
+  } else {
+    return ';';
+  }
+}
+
 ?>

@@ -18,7 +18,7 @@ function isLabel($listing_line) {
 }
 
 function isEmptyLine($c_code) {
-	return $c_code === "#"; 
+	return $c_code === "#";
 }
 
 function isUselessLabel($label) {
@@ -39,9 +39,9 @@ function isRelevantToHumanReading($listing_line) {
 			isLabel($listing_line);
 }
 
-function stripHighLevelCode($listing_line) {
+function stripHighLevelCode($listing_line, $assemblerCommentChar) {
 	$line = trim($listing_line);
-	$line = preg_replace('/[0-9]+:\/tmp\/temp.c\s+\*{4}\s*/', '#', $line);
+	$line = preg_replace('/[0-9]+:\/tmp\/temp.c\s+\*{4}\s*/', $assemblerCommentChar, $line);
 	return $line;
 }
 
