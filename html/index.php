@@ -38,6 +38,7 @@
 		<pre class="codeArea" id="inputCodeArea" contenteditable="true"></pre>
 		<pre class="codeArea" id="outputCodeArea"></pre>
 		<button type="button" onclick="sendCode();return false;">Compile it</button>
+		<button type="button">Edit</button>
 	</main>
 
 

@@ -16,6 +16,18 @@
 		}
 	}
 
+	function isCompilerGood($compiler) {
+		$compilers = array(
+			'avr-gcc',
+			'gcc',
+			'arm-none-eabi-gcc',
+			'arm-linux-gnueabi-gcc',
+			'mips-linux-gnu-gcc'
+		);
+
+		return in_array($compiler, $compilers, true);
+	}
+
 	error_reporting(E_ALL);
 	ini_set('display_errors', '1');
 	require('asmparse.php');
@@ -26,7 +38,7 @@
 
 	$in = json_decode(stripslashes(file_get_contents("php://input")), true);
 
-	var_dump($in);
+	//var_dump($in);
 
 	/* Compile the file and return the asm code */
 	file_put_contents($c_path, $in['code']);
@@ -34,18 +46,21 @@
 	$additional = $in['additional'];
 	$mustInterleave = $in['interleave'];
 
+	/* Check the user input */
+	if (!isCompilerGood($compiler)) {
+		die("Stop being so sneaky!");
+	}
 
 	addDefaultAdditionalFlags($additional, $compiler);
 
 	/* Create the command line string, validate it and execute it  */
-	/*if (!file_exists($asm_path)) {
-		touch($asm_path);
-		chmod($asm_path, 0666);
-	}*/
 
 	$cmdline_string = escapeshellcmd("$compiler $c_path $additional -Wa,-adhln -g");
 	$status = exec($cmdline_string, $exec_output, $ret_code);
 	//echo $cmdline_string . PHP_EOL;
+
+
+	//header("Content-Type: application/json");
 
 	foreach ($exec_output as $listing_line) {
 
@@ -81,7 +96,6 @@
 	//asta
 	//var_dump($exec_output);
 	//var_dump($ret_code);
-	//header("Content-Type: application/json");
 
 	/*
 	if ($ret_code !== 0) {

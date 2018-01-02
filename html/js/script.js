@@ -70,6 +70,7 @@ function sendCode() {
 	xhr.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			document.getElementById("outputCodeArea").innerHTML = this.responseText.replace(/\n/g, "<br />");
+			highlightMachineMnemonics();
 		}
 	};
 
@@ -102,6 +103,18 @@ function highlightSyntax() {
 	text = newlineToBr(text);
 
 	inputCodeArea.innerHTML = text;
+}
+
+function highlightMachineMnemonics() {
+	var machineInstructions = document.getElementsByClassName("machineInstruction");
+
+	var instructionRegex = /^[a-zA-Z0-9]+\b/g;
+
+	for (var instr of machineInstructions) {
+		var insideOfSpan = instr.innerHTML;
+		insideOfSpan = insideOfSpan.replace(instructionRegex, '<span class="keyword">$&</span>');
+		instr.innerHTML = insideOfSpan;
+	}
 }
 
 //setInterval(highlightSyntax, 10000);
