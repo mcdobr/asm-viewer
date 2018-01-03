@@ -8,6 +8,7 @@
 
 	//$c_path = '/tmp/temp.c';
 	$c_path = tempnam('/tmp', 'cfile') . '.c';
+	$c_prefix = basename($c_path, '.c');
 
 	$in = json_decode(stripslashes(file_get_contents("php://input")), true);
 
@@ -26,7 +27,7 @@
 		$assemblerCommentChar = getAssemblerCommentCharacter($compiler);
 	}
 
-	addDefaultAdditionalFlags($additional, $compiler);
+	addDefaultAdditionalFlags($additional, $compiler, $c_prefix);
 
 	/* Create the command line string, validate it and execute it  */
 	$cmdline_string = escapeshellcmd("$compiler $c_path $additional -Wa,-adhln -g");
@@ -84,5 +85,11 @@
 		 Delete the temporary files/
 		//unlink($asm_path);
 	}*/
-	unlink($c_path);
+	
+	/* Clean up the /tmp dir */
+	if (file_exists($c_path))
+		unlink($c_path);
+	$objFile = "/tmp/$c_prefix";
+	if (file_exists($objFile))
+		unlink($objFile);
 ?>

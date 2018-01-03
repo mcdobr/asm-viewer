@@ -1,5 +1,7 @@
 <?php
-function addDefaultAdditionalFlags(&$additional, $compiler) {
+function addDefaultAdditionalFlags(&$additional, $compiler, $filePrefix) {
+
+  $additional = $additional . "-o /tmp/$filePrefix";
   /* Set to the intel syntax */
   if ($compiler === "gcc" && preg_match('/^-masm=/', $additional) == 0) {
     $additional = $additional . " -masm=intel ";
