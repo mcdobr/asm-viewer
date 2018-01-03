@@ -39,9 +39,10 @@ function isRelevantToHumanReading($listing_line) {
 			isLabel($listing_line);
 }
 
-function stripHighLevelCode($listing_line, $assemblerCommentChar) {
+function stripHighLevelCode($listing_line, $assemblerCommentChar, $cFileName) {
+	$cFileName = str_replace('/', '\/', $cFileName);
 	$line = trim($listing_line);
-	$line = preg_replace('/[0-9]+:\/tmp\/temp.c\s+\*{4}\s*/', $assemblerCommentChar, $line);
+	$line = preg_replace('/[0-9]+:' . $cFileName . '\s+\*{4}\s*/', $assemblerCommentChar, $line);
 	return $line;
 }
 

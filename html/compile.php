@@ -4,8 +4,11 @@
 	ini_set('display_errors', '1');
 	require('asmparse.php');
 	require('compilerHandling.php');
+	header('Content-Type: application/json');
 
-	$c_path = '/tmp/temp.c';
+	//$c_path = '/tmp/temp.c';
+	$c_path = tempnam('/tmp', 'cfile') . '.c';
+
 	$in = json_decode(stripslashes(file_get_contents("php://input")), true);
 
 	//var_dump($in);
@@ -18,7 +21,7 @@
 
 	/* Check the user input */
 	if (!isCompilerGood($compiler)) {
-		die("Stop being so sneaky!");
+		die('Stop being so sneaky!');
 	} else {
 		$assemblerCommentChar = getAssemblerCommentCharacter($compiler);
 	}
@@ -30,24 +33,23 @@
 	$status = exec($cmdline_string, $exec_output, $ret_code);
 	//echo $cmdline_string . PHP_EOL;
 
-	header("Content-Type: application/json");
 
 	$response = '';
 	foreach ($exec_output as $listing_line) {
 
 		if (isRelevantToHumanReading($listing_line)) {
 			if (isHighLevelCode($listing_line)) {
-				$listing_line = stripHighLevelCode($listing_line, $assemblerCommentChar);
-				$spanClass = "highLevelCode";
+				$listing_line = stripHighLevelCode($listing_line, $assemblerCommentChar, $c_path);
+				$spanClass = 'highLevelCode';
 				if (!$mustInterleave || isEmptyLine($listing_line))
 					continue;
 				//continue;
 			} else if (isMachineInstruction($listing_line)) {
 				$listing_line = stripMachineInstruction($listing_line);
-				$spanClass = "machineInstruction";
+				$spanClass = 'machineInstruction';
 			} else if (isLabel($listing_line)) {
 				$listing_line = stripLabel($listing_line);
-				$spanClass = "label";
+				$spanClass = 'label';
 				if (isUselessLabel($listing_line)) {
 					continue;
 				}
