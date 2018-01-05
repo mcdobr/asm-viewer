@@ -91,9 +91,6 @@ function sendCode() {
 	xhr.open("POST", "compile.php", true);
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.send(requestBody);
-
-	/* To be removed in production (aka later) */
-	highlightSyntax();
 }
 
 function highlightSyntax() {
@@ -128,6 +125,35 @@ function highlightMachineMnemonics() {
 		insideOfSpan = insideOfSpan.replace(instructionRegex, '<span class="keyword">$&</span>');
 		instr.innerHTML = insideOfSpan;
 	}
+}
+
+function onEdit() {
+	if (typeof onEdit.isPressed == 'undefined')
+		onEdit.isPressed = false;
+
+	onEdit.isPressed = !onEdit.isPressed;
+
+	var inputCodeArea = document.getElementById("inputCodeArea");
+	var editButton = document.getElementById("editButton");
+
+	if (onEdit.isPressed) {
+		editButton.innerHTML = "Stop";
+		stripInputCodeSpans();
+		inputCodeArea.contentEditable = "true";
+	} else {
+		editButton.innerHTML = "Edit";
+		inputCodeArea.contentEditable = "false";
+		highlightSyntax();
+	}
+
+}
+
+function stripInputCodeSpans() {
+	var inputCodeArea = document.getElementById("inputCodeArea");
+	var content = inputCodeArea.innerHTML;
+	content = content.replace(/<\/?span[^>]*>/g, "");
+
+	inputCodeArea.innerHTML = content;
 }
 
 //setInterval(highlightSyntax, 10000);

@@ -11,7 +11,7 @@
 </head>
 
 
-<body onload="enableTabChar('inputCodeArea');">
+<body onload="enableTabChar('inputCodeArea');onEdit();">
 
 	<form action="compile.php" method="post" onsubmit="sendCode();return false;">
 		<select name="compiler" id="compilerSelect">
@@ -35,10 +35,12 @@
 	</form>
 
 	<main>
-		<pre class="codeArea" id="inputCodeArea" contenteditable="true"></pre>
+		<pre class="codeArea" id="inputCodeArea"></pre>
 		<pre class="codeArea" id="outputCodeArea"></pre>
 		<button type="button" onclick="sendCode();return false;">Compile it</button>
-		<button type="button">Edit</button>
+		<button type="button" onclick="onEdit();" id="editButton" class="toggleButton"></button>
+		<button type="button"></button>
+		<button type="button"></button>
 	</main>
 
 
