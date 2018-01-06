@@ -1,4 +1,7 @@
 function enableTabChar(elementId) {
+	/* This makes it possible to indent code because default behavior
+	 * is to just shift focus from the input area
+	 */
 	var elem = document.getElementById(elementId);
 
 	elem.onkeydown = function(e) {
@@ -27,8 +30,16 @@ function brToNewline(str) {
 	return str.replace(/<br\s*\/?>/mg, "\n");
 }
 
-function brToJSONnl(str) {
-	return str.replace(/<br\s*\/?>/mg, "\\n");
+function prepareForJSON(str) {
+	/* Because of the way html works a quote inside the input area
+	 * is a \", so you have to escape both of them so that the website works
+	 * with character arrays. Also you need to replace <br> tags to newlines
+	 * because the compiler has no notion of <br> tags.
+	 */
+	str = str.replace(/\"/g, '\\\"');
+	str = str.replace(/<br\s*\/?>/mg, "\\n");
+	return str;
+
 }
 
 function newlineToBr(str) {
@@ -36,19 +47,13 @@ function newlineToBr(str) {
 }
 
 function strip(html) {
+	/* this function returns the text content of an element */
 	var doc = new DOMParser().parseFromString(html, 'text/html');
 	return doc.body.textContent || "";
 }
 
-function prepareCodeForSend(code)
-{
-	/* Replace nbsp with spaces */
-	code = code.replace(/&nbsp;/g, ' ');
-
-	return code;
-}
-
 function onReceiveCallback(response) {
+	/* this function outputs the server response on the output area */
 	response = JSON.parse(response);
 	outputCode = document.getElementById("outputCodeArea");
 
@@ -61,9 +66,7 @@ function onReceiveCallback(response) {
 function sendCode() {
 	/* Send the code with newlines instead of br tags */
 	var codeArea = document.getElementById("inputCodeArea");
-	var code = strip(brToJSONnl(codeArea.innerHTML));
-	code = prepareCodeForSend(code);
-
+	var code = strip(prepareForJSON(codeArea.innerHTML));
 
 	var compiler = document.getElementById("compilerSelect").value;
 	var additional = document.getElementById("additionalOptions").value;
@@ -79,6 +82,7 @@ function sendCode() {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
+			//document.getElementById("outputCodeArea").innerHTML = this.responseText;
 			onReceiveCallback(this.responseText);
 		}
 	};
@@ -151,5 +155,3 @@ function stripInputCodeSpans() {
 
 	inputCodeArea.innerHTML = content;
 }
-
-//setInterval(highlightSyntax, 10000);

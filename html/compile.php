@@ -104,7 +104,18 @@
 	$cPrefix = basename($cPath, '.c');
 	$cLog = '/tmp/' . $cPrefix . '.log';
 
-	$in = json_decode(stripslashes(file_get_contents("php://input")), true);
+	$contents = file_get_contents("php://input");
+	$in = json_decode(stripslashes($contents), true);
+
+	/*echo "CONTENTS" . PHP_EOL;
+	echo $contents . PHP_EOL . PHP_EOL;
+
+	echo "STRIPPED" . PHP_EOL;
+	echo stripslashes($contents) . PHP_EOL . PHP_EOL;*/
+
+
+
+	//echo json_encode(var_dump($in));
 
 	/* Compile the file and return the asm code */
 	file_put_contents($cPath, $in['code']);
@@ -113,8 +124,9 @@
 	$mustInterleave = $in['interleave'];
 
 	/* Check the user input */
+	//echo json_encode(var_dump($in));
 	if (!isCompilerGood($compiler)) {
-		die('Stop being so sneaky!');
+		die(json_encode('Stop being so sneaky!'));
 	}
 
 	addDefaultAdditionalFlags($additional, $compiler, $cPrefix);
