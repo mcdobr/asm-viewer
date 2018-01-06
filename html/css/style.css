@@ -47,3 +47,13 @@ main {
 #outputCodeArea .highLevelCode {
 	color: #006400;
 }
+
+.error {
+	color: red;
+	font-weight: bold;
+}
+
+.warning {
+	color: #AAD1B7;
+	font-weight: bold;
+}

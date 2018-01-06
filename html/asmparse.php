@@ -2,7 +2,7 @@
 
 function isHighLevelCode($listingLine) {
 	/* if it contains 4 stars */
-	return preg_match('/\*{4}/', $listingLine);
+	return strpos($listingLine, '****') !== false;
 }
 
 function isMachineInstruction($listingLine) {

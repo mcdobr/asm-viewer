@@ -2,11 +2,11 @@
 	function addDefaultAdditionalFlags(&$additional, $compiler, $filePrefix) {
 
 	  $additional = $additional . " -o /tmp/$filePrefix";
-	  /* Set to the intel syntax */
-	  if ($compiler === "gcc" && preg_match('/^-masm=/', $additional) == 0) {
+	  /* Set to the intel syntax if not already set*/
+	  if ($compiler === "gcc" && strpos($additional, '-masm=') === false) {
 	    $additional = $additional . " -masm=intel ";
 	  }
-	  if (preg_match('/^-fno-asynchronous-unwind-tables/', $additional) == 0) {
+	  if (strpos($additional, '-fno-asynchronous-unwind-tables') === false) {
 	    $additional = $additional . " -fno-asynchronous-unwind-tables ";
 	  }
 	}
@@ -31,6 +31,18 @@
 	  } else {
 	    return ';';
 	  }
+	}
+	function highlightAndStripErrorsAndWarnings($compilerStderr, $cPath) {
+		$cPath = str_replace('/', '\/', $cPath);
+
+		/* Strip the filename so the client can't see it */
+		$compilerStderr = preg_replace('/\/[^:]+: ?/', '', $compilerStderr);
+		$compilerStderr = preg_replace('/[0-9]+:[0-9]+:/', "line $0", $compilerStderr);
+
+		/* Highlight the warnings and errors */
+		$compilerStderr = str_replace('error', '<span class="error">error</span>' , $compilerStderr);
+		$compilerStderr = str_replace('warning', '<span class="warning">warning</span>' , $compilerStderr);
+		return $compilerStderr;
 	}
 
 	function createResponse($execOutput, $compiler, $cPath, $cLog, $mustInterleave) {
@@ -59,11 +71,15 @@
 			}
 		}
 
-		/* If there is no assembly code, then there must be an error */
-		if ($response === '') {
-			$compilerStderr = file_get_contents($cLog);
-			$response = $compilerStderr;
-		}
+		/* Append the errors and warnings to the end */
+		$compilerStderr = file_get_contents($cLog);
+		$compilerStderr = highlightAndStripErrorsAndWarnings($compilerStderr, $cPath);
+
+		if ($response !== '')
+			$response = $response . PHP_EOL;
+		if ($compilerStderr !== '')
+			$response = $response . "COMPILER ERRORS AND WARNINGS" . PHP_EOL . $compilerStderr;
+
 		return $response;
 	}
 
