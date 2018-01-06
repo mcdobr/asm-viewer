@@ -55,12 +55,8 @@ function onReceiveCallback(response) {
 	if (response) {
 		outputCode.innerHTML = response.replace(/\n/g, "<br />");
 		highlightMachineMnemonics();
-	} else {
-		outputCode.innerHTML = "Compilation failed!<br />"
 	}
-
 }
-
 
 function sendCode() {
 	/* Send the code with newlines instead of br tags */
