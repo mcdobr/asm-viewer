@@ -1,4 +1,11 @@
 <?php
+
+	function consoleLog($data) {
+		echo '<script>';
+		echo 'console.log('. json_encode($data) .')';
+		echo '</script>';
+	}
+
 	function addDefaultAdditionalFlags(&$additional, $compiler, $filePrefix) {
 
 	  $additional = $additional . " -o /tmp/$filePrefix";
@@ -104,6 +111,7 @@
 	$cPrefix = basename($cPath, '.c');
 	$cLog = '/tmp/' . $cPrefix . '.log';
 
+
 	$contents = file_get_contents("php://input");
 	$in = json_decode(stripslashes($contents), true);
 
@@ -113,12 +121,14 @@
 	echo "STRIPPED" . PHP_EOL;
 	echo stripslashes($contents) . PHP_EOL . PHP_EOL;*/
 
-
+	//consoleLog($contents);
+	//consoleLog($in);
 
 	//echo json_encode(var_dump($in));
 
 	/* Compile the file and return the asm code */
 	file_put_contents($cPath, $in['code']);
+	//consoleLog($in['code']);
 	$compiler = $in['compiler'];
 	$additional = $in['additional'];
 	$mustInterleave = $in['interleave'];
@@ -135,6 +145,7 @@
 	$cmdline_string = escapeshellcmd("$compiler $cPath $additional -Wa,-adhln -g") . " 2> $cLog";
 	$status = exec($cmdline_string, $execOutput, $ret_code);
 
+	//consoleLog($cmdline_string);
 	/* Create the response */
 	$response = createResponse($execOutput, $compiler, $cPath, $cLog, $mustInterleave);
 

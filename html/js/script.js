@@ -23,6 +23,7 @@ function enableTabChar(elementId) {
 			sel.removeAllRanges();
 			sel.addRange(range);
 		}
+		//if ()
 	};
 }
 
@@ -59,6 +60,9 @@ function onReceiveCallback(response) {
 
 	if (response) {
 		outputCode.innerHTML = response.replace(/\n/g, "<br />");
+																	// .replace(/</g, "&lt;")
+																	// .replace(/>/g, "&gt;");
+
 		highlightMachineMnemonics();
 	}
 }

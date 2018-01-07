@@ -43,6 +43,10 @@ function stripHighLevelCode($listingLine, $assemblerCommentChar, $cFileName) {
 	$cFileName = str_replace('/', '\/', $cFileName);
 	$line = trim($listingLine);
 	$line = preg_replace('/[0-9]+:' . $cFileName . '\s+\*{4}\s*/', $assemblerCommentChar, $line);
+
+	/* this is so the browser doesn't interpret header files as html tags */
+	$line = preg_replace('/</', '&lt;', $line);
+	$line = preg_replace('/>/', '&gt;', $line);
 	return $line;
 }
 
