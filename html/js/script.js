@@ -60,8 +60,6 @@ function onReceiveCallback(response) {
 
 	if (response) {
 		outputCode.innerHTML = response.replace(/\n/g, "<br />");
-																	// .replace(/</g, "&lt;")
-																	// .replace(/>/g, "&gt;");
 
 		highlightMachineMnemonics();
 	}
@@ -112,7 +110,8 @@ function highlightSyntax() {
 
 	inputCodeArea.innerHTML = brToNewline(inputCodeArea.innerHTML);
 
-	var text = inputCodeArea.textContent;
+	//var text = inputCodeArea.textContent;
+	var text = inputCodeArea.innerHTML;
 	text = text.replace(keywordRegex, '<span class="keyword">$&</span>');
 	text = newlineToBr(text);
 

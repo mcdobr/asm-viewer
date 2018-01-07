@@ -5,15 +5,16 @@ html, body {
 }
 
 main {
-	display: flex;
 	min-width:600px;
 	height: 92%;
+	display: float;
 	flex-flow: row wrap;
 }
 
+
 .codeArea {
 	min-width: 300px;
-	width: 49%;
+	width: 48.8%;
 	height: 100%;
 	border: 1px solid black;
 	margin: 4px;
@@ -25,10 +26,12 @@ main {
 #inputCodeArea {
 	float: left;
 	white-space: pre-wrap;
+	margin-left:0.5%;
 }
 
 #outputCodeArea {
 	float: right;
+	margin-right:0.5%;
 }
 
 .keyword {

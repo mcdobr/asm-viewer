@@ -37,9 +37,11 @@
 	<main>
 		<pre class="codeArea" id="inputCodeArea"></pre>
 		<pre class="codeArea" id="outputCodeArea"></pre>
+	</main>
+	<section>
 		<button type="button" onclick="sendCode();return false;">Compile it</button>
 		<button type="button" onclick="onEdit();" id="editButton" class="toggleButton"></button>
-	</main>
+	</section>
 
 
 </body>
